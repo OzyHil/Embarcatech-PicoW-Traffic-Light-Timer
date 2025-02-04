@@ -59,9 +59,10 @@ int main()
     struct repeating_timer timer;
     add_repeating_timer_ms(3000, TrafficLightUpdate, NULL, &timer);
 
-
+    // Loop principal
     while (true)
     {
-        sleep_ms(1000000);
+        printf("Traffic light in operation: light cycle ongoing...\n");
+        sleep_ms(1000);
     }
 }
