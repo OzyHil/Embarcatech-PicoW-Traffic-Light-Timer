@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 
-#define GREEN_LED 11 // Pino do LED verde
-#define BLUE_LED 12 // Pino do LED azul
-#define RED_LED 13 // Pino do LED vermelho
+#define RED_LED 11 // Pino do LED vermelho
+#define YELLOW_LED 12 // Pino do LED amarelo
+#define GREEN_LED 13 // Pino do LED verde
 
 int8_t count = 1; // Variável de controle para alternar entre os LEDs
 
@@ -26,14 +26,16 @@ bool TrafficLightUpdate(struct repeating_timer *t)
     {
     case 0: // Sinal vermelho
         gpio_put(GREEN_LED, false); // Desliga o LED verde
-        gpio_put(RED_LED, true); // Liga o LED vermelho
+        gpio_put(RED_LED, true);    // Liga o LED vermelho
         break;
     case 1: // Sinal amarelo
-        gpio_put(GREEN_LED, true); // Liga o LED verde
+        gpio_put(RED_LED, false);   // Desliga o LED vermelho
+        gpio_put(YELLOW_LED, true); // Liga o LED amarelo
         break;
     case 2: // Sinal verde
-        gpio_put(RED_LED, false); // Desliga o LED vermelho
-        count = -1; // Reinicia o ciclo de contagem
+        gpio_put(YELLOW_LED, false); // Desliga o LED amarelo
+        gpio_put(GREEN_LED, true);   // Liga o LED verde
+        count = -1;                  // Reinicia o ciclo de contagem
         break;
     }
 
@@ -47,7 +49,7 @@ int main()
     stdio_init_all(); // Inicializa a biblioteca padrão de entrada/saída
 
     // Inicializa todos os LEDs
-    int led_pins[] = {GREEN_LED, BLUE_LED, RED_LED};
+    int led_pins[] = {RED_LED, YELLOW_LED, GREEN_LED};
     SetOutputs(led_pins, sizeof(led_pins) / sizeof(led_pins[0]));
 
     // Inicializa o LED vermelho (inicia com o sinal vermelho)
